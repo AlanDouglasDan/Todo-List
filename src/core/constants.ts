@@ -48,6 +48,11 @@ export const TASKS = [
     category: 'Health',
     color: palette.PURPLE,
     backgroundColor: palette.LIGHT_PURPLE,
+    subLists: [
+      { id: 1, title: 'Fill a glass of water' },
+      { id: 2, title: 'Drink the glass of water' },
+      { id: 3, title: 'Repeat 8 times' },
+    ],
   },
   {
     id: 2,
@@ -57,6 +62,11 @@ export const TASKS = [
     category: 'Mental Health',
     color: palette.PINK,
     backgroundColor: palette.LIGHT_PINK,
+    subLists: [
+      { id: 1, title: 'Get a notebook' },
+      { id: 2, title: 'Write down your thoughts' },
+      { id: 3, title: 'Write down your goals' },
+    ],
   },
   {
     id: 3,
@@ -66,5 +76,10 @@ export const TASKS = [
     category: 'Work',
     color: palette.GREEN,
     backgroundColor: palette.LIGHT_GREEN,
+    subLists: [
+      { id: 1, title: 'Get a notebook' },
+      { id: 2, title: 'Write down your thoughts' },
+      { id: 3, title: 'Write down your goals' },
+    ],
   },
 ];

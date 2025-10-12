@@ -5,7 +5,7 @@ import { Home, Task, Calendar } from '../screens';
 
 export type AppStackNavParams = {
   Home: undefined;
-  Task: undefined;
+  Task: { task?: any };
   Calendar: { category?: any };
 };
 
