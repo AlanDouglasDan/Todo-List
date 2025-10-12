@@ -7,7 +7,7 @@ export const palette = {
   DISABLED: '#C5C5C5',
   DARK_BROWN: '#393433',
   GREY: '#A0A0A0',
-  GREY2: '#505050',
+  GREY2: '#F6F6F6',
   LIGHT_PURPLE: 'rgba(121, 144, 248, 0.1)',
   PURPLE: '#7990F8',
   LIGHT_GREEN: 'rgba(70, 207, 139, 0.1)',
