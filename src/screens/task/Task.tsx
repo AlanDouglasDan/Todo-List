@@ -48,7 +48,7 @@ const Task: FC<NativeStackScreenProps<AppStackNavParams, 'Task'>> = ({
               </TouchableOpacity>
             </View>
 
-            <View style={spacing.marginBottom50}>
+            <View style={spacing.marginTop60}>
               <TextInput
                 style={styles.header36}
                 placeholder="Enter task..."

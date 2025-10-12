@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { Home, Task } from '../screens';
+import { Home, Task, Calendar } from '../screens';
 
 export type AppStackNavParams = {
   Home: undefined;
@@ -23,6 +23,12 @@ const AppStackNav: FC = () => {
       <Stack.Screen
         name="Task"
         component={Task}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name="Calendar"
+        component={Calendar}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

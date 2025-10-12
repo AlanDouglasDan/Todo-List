@@ -38,3 +38,33 @@ export const lists = [
     ],
   },
 ];
+
+export const TASKS = [
+  {
+    id: 1,
+    title: 'Drink 8 glasses of water',
+    startTime: 6,
+    duration: 1,
+    category: 'Health',
+    color: palette.PURPLE,
+    backgroundColor: palette.LIGHT_PURPLE,
+  },
+  {
+    id: 2,
+    title: 'Get a notebook',
+    startTime: 9,
+    duration: 1,
+    category: 'Mental Health',
+    color: palette.PINK,
+    backgroundColor: palette.LIGHT_PINK,
+  },
+  {
+    id: 3,
+    title: 'Work',
+    startTime: 10,
+    duration: 4,
+    category: 'Work',
+    color: palette.GREEN,
+    backgroundColor: palette.LIGHT_GREEN,
+  },
+];
