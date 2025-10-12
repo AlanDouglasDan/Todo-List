@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-import SubList from '../SubList/SubList';
+import { SubList } from '../SubList';
 import { common, palette, spacing } from 'core/styles';
 import styles from './Accordion.styles';
 

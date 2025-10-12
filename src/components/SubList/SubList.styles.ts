@@ -10,5 +10,6 @@ export default StyleSheet.create({
   text18: {
     ...typography.text18,
     color: palette.BLACK,
+    marginTop: -4,
   },
 });
