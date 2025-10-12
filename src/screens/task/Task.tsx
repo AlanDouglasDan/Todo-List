@@ -19,9 +19,13 @@ import styles from './Task.styles';
 
 const Task: FC<NativeStackScreenProps<AppStackNavParams, 'Task'>> = ({
   navigation,
+  route,
 }) => {
-  const [title, setTitle] = useState<string>('');
-  //   const [subTasks, setSubTasks] = useState<any[]>([]);
+  const task = route.params?.task;
+  const isViewMode = !!task;
+
+  const [title, setTitle] = useState<string>(task?.title || '');
+  const [subLists, _setSubLists] = useState<any[]>(task?.subLists || []);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -56,17 +60,38 @@ const Task: FC<NativeStackScreenProps<AppStackNavParams, 'Task'>> = ({
                 multiline
                 value={title}
                 onChangeText={setTitle}
+                editable={!isViewMode}
               />
 
               <View style={[spacing.marginTop32, styles.subListContainer]}>
-                <SubList disabled={false} />
+                {isViewMode ? (
+                  <>
+                    {subLists.map((subList, index) => (
+                      <View
+                        key={subList.id}
+                        style={index > 0 && spacing.marginTop16}
+                      >
+                        <SubList list={subList} disabled={true} />
+                      </View>
+                    ))}
+                    {/* Additional SubList for adding new subtask */}
+                    <View style={subLists.length > 0 && spacing.marginTop16}>
+                      <SubList disabled={false} />
+                    </View>
+                  </>
+                ) : (
+                  <SubList disabled={false} />
+                )}
               </View>
             </View>
           </View>
         </ScrollView>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('Home')}
+          >
             <Text style={styles.semiheader18}>Save</Text>
           </TouchableOpacity>
         </View>

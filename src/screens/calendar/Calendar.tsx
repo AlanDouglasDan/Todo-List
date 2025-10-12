@@ -88,30 +88,30 @@ const Calendar: FC<NativeStackScreenProps<AppStackNavParams, 'Calendar'>> = ({
           animated: true,
         });
       } else if (attempts < 10) {
-        setTimeout(tryScroll, 50);
+        setTimeout(tryScroll, 500);
       }
     };
     tryScroll();
   }, [dates, today]);
 
-  // Scroll agenda to current time on mount
-  useEffect(() => {
-    const currentHour = today.getHours();
-    let attempts = 0;
-    const tryScrollAgenda = () => {
-      attempts += 1;
-      const y = timeSlotPositions.current[currentHour];
-      if (typeof y === 'number' && agendaScrollRef.current) {
-        agendaScrollRef.current.scrollTo({
-          y: Math.max(y - 100, 0),
-          animated: true,
-        });
-      } else if (attempts < 10) {
-        setTimeout(tryScrollAgenda, 50);
-      }
-    };
-    setTimeout(tryScrollAgenda, 300);
-  }, [today]);
+//   // Scroll agenda to current time on mount
+//   useEffect(() => {
+//     const currentHour = today.getHours();
+//     let attempts = 0;
+//     const tryScrollAgenda = () => {
+//       attempts += 1;
+//       const y = timeSlotPositions.current[currentHour];
+//       if (typeof y === 'number' && agendaScrollRef.current) {
+//         agendaScrollRef.current.scrollTo({
+//           y: Math.max(y - 100, 0),
+//           animated: true,
+//         });
+//       } else if (attempts < 10) {
+//         setTimeout(tryScrollAgenda, 50);
+//       }
+//     };
+//     setTimeout(tryScrollAgenda, 300);
+//   }, [today]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -227,7 +227,7 @@ const Calendar: FC<NativeStackScreenProps<AppStackNavParams, 'Calendar'>> = ({
                     }
 
                     return (
-                      <View
+                      <TouchableOpacity
                         key={task.id}
                         style={[
                           styles.taskCard,
@@ -236,6 +236,7 @@ const Calendar: FC<NativeStackScreenProps<AppStackNavParams, 'Calendar'>> = ({
                             height: totalHeight,
                           },
                         ]}
+                        onPress={() => navigation.navigate('Task', { task })}
                       >
                         <View style={styles.taskContent}>
                           <View style={styles.taskHeader}>
@@ -252,7 +253,7 @@ const Calendar: FC<NativeStackScreenProps<AppStackNavParams, 'Calendar'>> = ({
                             {task.duration}h
                           </Text>
                         </View>
-                      </View>
+                      </TouchableOpacity>
                     );
                   })}
                 </View>
