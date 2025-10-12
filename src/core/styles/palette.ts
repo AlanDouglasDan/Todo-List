@@ -6,7 +6,6 @@ export const palette = {
   BLUE: '#0000FF',
   DISABLED: '#C5C5C5',
   DARK_BROWN: '#393433',
-  BROWN: "#908986",
   GREY: '#A0A0A0',
   GREY2: '#505050',
   LIGHT_PURPLE: 'rgba(121, 144, 248, 0.1)',
@@ -15,5 +14,7 @@ export const palette = {
   GREEN: '#46CF8B',
   LIGHT_PINK: 'rgba(188, 94, 173, 0.1)',
   PINK: "#BC5EAD",
-  LIGHT_BROWN: 'rgba(144, 137, 134, 0.1)'
+  LIGHT_BROWN: 'rgba(144, 137, 134, 0.1)',
+  BROWN: "#908986",
+  BROWN2: "#393433"
 };

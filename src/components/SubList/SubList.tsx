@@ -1,16 +1,18 @@
 import React, { FC, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, TextInput } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
-import { palette, spacing } from 'core/styles';
+import { palette } from 'core/styles';
 import styles from './SubList.styles';
 
 interface SubListProps {
   list?: any;
+  disabled?: boolean;
 }
 
-const SubList: FC<SubListProps> = ({ list }) => {
+const SubList: FC<SubListProps> = ({ list, disabled = true }) => {
   const [toggleCheckBox, setToggleCheckBox] = useState<boolean>(false);
+  const [text, setText] = useState<string>(list?.title || '');
 
   return (
     <View style={styles.flexedRow}>
@@ -20,7 +22,14 @@ const SubList: FC<SubListProps> = ({ list }) => {
         tintColors={{ true: palette.BLUE }}
       />
 
-      <Text style={[styles.text18, spacing.marginTop4]}>{list?.title}</Text>
+      <TextInput
+        style={styles.text18}
+        value={text}
+        onChangeText={setText}
+        placeholder="Add subtask"
+        placeholderTextColor={palette.GREY}
+        editable={!disabled}
+      />
     </View>
   );
 };
