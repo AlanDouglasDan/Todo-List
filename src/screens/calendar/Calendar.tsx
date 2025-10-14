@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { AppStackNavParams } from 'navigation/AppStackNav';
+import { formatHeaderDate } from 'core/utils';
 import { TASKS } from 'core/constants';
 import { palette, spacing } from 'core/styles';
 import styles from './Calendar.styles';
@@ -50,13 +51,6 @@ const Calendar: FC<NativeStackScreenProps<AppStackNavParams, 'Calendar'>> = ({
     return date.toLocaleDateString('en-US', { weekday: 'short' });
   };
 
-  // Format header date
-  const formatHeaderDate = (date: Date) => {
-    const day = date.getDate();
-    const mon = date.toLocaleString('en-US', { month: 'short' });
-    return `${day} ${mon}`;
-  };
-
   // Check if two dates are the same day
   const isSameDay = (date1: Date, date2: Date) => {
     return (
@@ -94,24 +88,24 @@ const Calendar: FC<NativeStackScreenProps<AppStackNavParams, 'Calendar'>> = ({
     tryScroll();
   }, [dates, today]);
 
-//   // Scroll agenda to current time on mount
-//   useEffect(() => {
-//     const currentHour = today.getHours();
-//     let attempts = 0;
-//     const tryScrollAgenda = () => {
-//       attempts += 1;
-//       const y = timeSlotPositions.current[currentHour];
-//       if (typeof y === 'number' && agendaScrollRef.current) {
-//         agendaScrollRef.current.scrollTo({
-//           y: Math.max(y - 100, 0),
-//           animated: true,
-//         });
-//       } else if (attempts < 10) {
-//         setTimeout(tryScrollAgenda, 50);
-//       }
-//     };
-//     setTimeout(tryScrollAgenda, 300);
-//   }, [today]);
+  //   // Scroll agenda to current time on mount
+  //   useEffect(() => {
+  //     const currentHour = today.getHours();
+  //     let attempts = 0;
+  //     const tryScrollAgenda = () => {
+  //       attempts += 1;
+  //       const y = timeSlotPositions.current[currentHour];
+  //       if (typeof y === 'number' && agendaScrollRef.current) {
+  //         agendaScrollRef.current.scrollTo({
+  //           y: Math.max(y - 100, 0),
+  //           animated: true,
+  //         });
+  //       } else if (attempts < 10) {
+  //         setTimeout(tryScrollAgenda, 50);
+  //       }
+  //     };
+  //     setTimeout(tryScrollAgenda, 300);
+  //   }, [today]);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
