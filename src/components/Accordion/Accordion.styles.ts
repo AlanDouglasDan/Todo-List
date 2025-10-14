@@ -19,7 +19,7 @@ export default StyleSheet.create({
     paddingHorizontal: 16,
   },
   gap: {
-    gap: 16,
+    gap: 12,
   },
   text18: {
     ...typography.text18,

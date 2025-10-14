@@ -6,6 +6,7 @@ import {
   Platform,
   UIManager,
   TouchableOpacity,
+  Pressable,
 } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
@@ -46,7 +47,9 @@ const Accordion: FC<AccordionProps> = ({ list }) => {
 
         <View style={spacing.marginTop4}>
           <View>
-            <Text style={styles.text18}>{list?.title}</Text>
+            <Pressable onPress={() => setToggleCheckBox(!toggleCheckBox)}>
+              <Text style={styles.text18}>{list?.title}</Text>
+            </Pressable>
 
             <View
               style={[
@@ -64,7 +67,7 @@ const Accordion: FC<AccordionProps> = ({ list }) => {
             <View style={spacing.marginTop20}>
               {list?.subLists?.length > 0 &&
                 list?.subLists?.map((item: any) => (
-                  <SubList key={item?.id} list={item} />
+                  <SubList key={item?.id} list={item} parentChecked={toggleCheckBox} />
                 ))}
             </View>
           )}

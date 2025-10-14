@@ -1,13 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Svg, Path } from 'react-native-svg';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { AppStackNavParams } from '../../navigation/AppStackNav';
+import { AppStackNavParams } from 'navigation/AppStackNav';
 import { Accordion } from 'components/Accordion';
+import { formatHeaderDate } from 'core/utils';
 import { lists } from 'core/constants';
-import { palette, spacing } from '../../core/styles';
+import { palette, spacing } from 'core/styles';
 import styles from './Home.styles';
 
 const categories = [
@@ -90,6 +91,8 @@ const categories = [
 const Home: FC<NativeStackScreenProps<AppStackNavParams, 'Home'>> = ({
   navigation,
 }) => {
+  const today = useMemo(() => new Date(), []);
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <ScrollView
@@ -97,7 +100,8 @@ const Home: FC<NativeStackScreenProps<AppStackNavParams, 'Home'>> = ({
         contentContainerStyle={styles.contentContainer}
       >
         <Text style={styles.header36}>
-          Today <Text style={{ color: palette.GREY }}>11 Oct</Text>
+          Today{' '}
+          <Text style={{ color: palette.GREY }}>{formatHeaderDate(today)}</Text>
         </Text>
 
         <View style={styles.categoriesGrid}>
@@ -127,7 +131,7 @@ const Home: FC<NativeStackScreenProps<AppStackNavParams, 'Home'>> = ({
 
       <TouchableOpacity
         style={styles.floatingButton}
-        onPress={() => navigation.navigate('Task')}
+        onPress={() => navigation.navigate('Task', { task: undefined })}
       >
         <Svg width="32" height="32" viewBox="0 0 32 32" fill="none">
           <Path

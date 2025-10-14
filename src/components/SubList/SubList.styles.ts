@@ -5,11 +5,17 @@ import { palette, typography } from '../../core/styles';
 export default StyleSheet.create({
   flexedRow: {
     flexDirection: 'row',
-    gap: 16,
+    alignItems: 'center',
+    gap: 12,
+  },
+  checkbox: {
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text18: {
     ...typography.text18,
     color: palette.BLACK,
-    marginTop: -4,
   },
 });
