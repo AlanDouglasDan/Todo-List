@@ -1,97 +1,172 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Todo-List (React Native) — Project Documentation
 
-# Getting Started
+## Overview
+- **Goal**: A lightweight, mobile Todo app with categories, subtasks, and a simple calendar.
+- **Focus**: Clean component design, smooth interactions, strict style tokens, and minimal state.
+- **Key UX**:
+  - Expandable lists with a parent checkbox controlling all subtasks.
+  - Subtasks editable in context.
+  - Calendar ribbon and daily agenda scaffolding.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Tech Stack
+- **Runtime/UI**: React Native
+- **Navigation**: React Navigation stack (`src/navigation/AppStackNav.tsx`)
+- **UI tokens**: `palette`, `typography`, `spacing`, `layout` (`src/core/styles/`)
+- **SVG**: `react-native-svg` for icons (e.g., `src/screens/home/Home.tsx`)
+- **Checkbox**: `@react-native-community/checkbox`
+- **Animation**: `LayoutAnimation` + Android UIManager enablement
+- **Architecture**: Smart/dumb container split via co-located hooks (`useXLogic.ts[x]`) next to UI `.tsx` files.
 
-## Step 1: Start Metro
+## Directory Structure
+- **`src/components/Accordion/`**
+  - `Accordion.tsx`: Expandable list with parent checkbox; passes state to subtasks.
+  - `Accordion.styles.ts`: Row layout, spacing, typography.
+  - `useAccordionLogic.ts`: Hook for checkbox/expand state and Android UIManager enablement.
+- **`src/components/SubList/`**
+  - `SubList.tsx`: Subtask row with checkbox and text input; synced with parent.
+  - `SubList.styles.ts`: Stable layout for checkbox + input alignment.
+  - `useSubListLogic.ts`: Hook for checkbox/text state and parent sync.
+- **`src/screens/home/`**
+  - `Home.tsx`: Header showing “Today” plus date, categories, and list accordions.
+  - `useHomeLogic.tsx`: Provides memoized `today` and `categories`.
+- **`src/screens/calendar/`**
+  - `Calendar.tsx`: Date ribbon and agenda scaffolding; header date uses shared util.
+  - `useCalendarLogic.ts`: Date generation, scroll refs, and helpers (`formatDayOfWeek`, `isSameDay`, `dateKey`, `formatTime`), plus exported `TIME_SLOTS`.
+- **`src/screens/task/`**
+  - `Task.tsx`: Task detail/edit screen scaffold.
+  - `useTaskLogic.ts`: Manages `isViewMode`, `title`, and `subLists`.
+- **`src/navigation/`**
+  - `AppStackNav.tsx`: Stack routes and typed params (`AppStackNavParams`).
+- **`src/core/`**
+  - `constants.ts`: Sample data for lists and subtasks.
+  - `utils.ts`: `formatHeaderDate(date)` utility.
+  - `styles/`: `palette.ts`, `typography.ts`, `spacing.ts`, `layout.ts`, `common.ts`, `index.ts`.
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Smart/Dumb Containers
+- **Presentational files**: `*.tsx` render UI only and consume data/handlers from hooks.
+- **Logic hooks**: `useXLogic.ts[x]` co-located with each UI file manage state, refs, effects, and helpers.
+- **Benefits**: Clear separation of concerns, improved testability, and simpler reuse.
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## Data Model
+- **List**: `{ id, title, tag, tagBackground, tagColor, subLists }`
+- **SubList**: `{ id, title }`
+- Data is currently static (`src/core/constants.ts`). Ideal for prototyping; can be replaced by API or storage later.
 
-```sh
-# Using npm
-npm start
+## Key Components & Interactions
 
-# OR using Yarn
-yarn start
-```
+- **`Accordion` (`src/components/Accordion/Accordion.tsx`)**
+  - Logic (`useAccordionLogic.ts`):
+    - `expanded`: shows/hides subtasks; uses `LayoutAnimation` for smoothness.
+    - `toggleCheckBox`: parent checkbox state.
+  - Parent checkbox controls subtasks by passing `parentChecked={toggleCheckBox}` to each `SubList`.
+  - Android: `UIManager.setLayoutAnimationEnabledExperimental(true)` for animations.
+  - UX niceties:
+    - Title press toggles the parent checkbox.
+    - Container uses gap-based spacing for consistent row layout.
 
-## Step 2: Build and run your app
+- **`SubList` (`src/components/SubList/SubList.tsx`)**
+  - Logic (`useSubListLogic.ts`):
+    - `toggleCheckBox`: subtask checkbox.
+    - `text`: input field content (seeded from `list?.title`).
+  - Sync with parent (in hook):
+    - `useEffect` listens to `parentChecked` and updates local checkbox accordingly.
+  - Input interaction:
+    - When `disabled` is `true`, the `TextInput` is wrapped by a `Pressable` so tapping the text toggles the checkbox (input itself is non-editable).
+  - Layout stability:
+    - Fixed-size checkbox container (`styles.checkbox`) prevents overlap/clipping.
+    - Text uses defined typography and flexible width via `layout.flex1` when editable.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## Styling System
+- **Tokens** live in `src/core/styles/`:
+  - **`palette.ts`**: Color constants.
+  - **`typography.ts`**: Size, weight, line-heights; e.g., `typography.text18`.
+  - **`spacing.ts`**: Margin/padding helpers; e.g., `spacing.marginTop20`.
+  - **`layout.ts`**: Primitives like `flex1` for consistent layout semantics.
+  - **`common.ts`**: Shared one-offs like `common.line`.
+- **Rationale**: Central tokens enforce visual consistency and simplify global changes.
 
-### Android
+## Navigation
+- **Stack navigation** via `AppStackNav.tsx`:
+  - Typed params (`AppStackNavParams`) for safer routing.
+  - Screens: `Home`, `Task`, `Calendar` (as referenced in imports).
 
-```sh
-# Using npm
-npm run android
+## Utilities
+- **`formatHeaderDate(date)`** (`src/core/utils.ts`):
+  - Used by `Home` and `Calendar` to render dates like “11 Oct”.
+  - Centralized for consistency and testability.
 
-# OR using Yarn
-yarn android
-```
+## Thought Process & Design Decisions
 
-### iOS
+- **Local-first state**:
+  - `SubList` owns its own checkbox and text state for responsiveness and isolation.
+  - Parent (`Accordion`) influences children through a single prop (`parentChecked`) to keep contracts minimal and predictable.
+- **Unidirectional data flow**:
+  - Parent → child prop sync avoids complex bi-directional state coupling.
+  - Children still remain interactive independently (e.g., individual subtask toggles).
+- **Progressive enhancement**:
+  - Smooth animations using `LayoutAnimation`, guarded for Android.
+  - Pressable affordances:
+    - Tapping the title toggles parent checkbox.
+    - Tapping disabled subtask text toggles its checkbox.
+- **Layout stability**:
+  - Removed jitter sources (negative margins; replaced `gap` clashes).
+  - Fixed checkbox bounds avoid text clipping; inputs flex correctly.
+- **Style tokens**:
+  - Palette/typography centralization reduces duplication and enforces brand consistency.
+- **Path hygiene**:
+  - Absolute-style imports like `core/styles` and `components/Accordion` keep imports clean and refactor-friendly.
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+## How to Run
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+- **Install dependencies (project root)**
+  - npm: `npm install`
+  - yarn: `yarn install`
 
-```sh
-bundle install
-```
+- **Start Metro (in a separate terminal)**
+  - npm: `npm start`
+  - yarn: `yarn start`
 
-Then, and every time you update your native dependencies, run:
+- **iOS setup (first run or after native deps change)**
+  - Ensure Ruby Bundler is available: `gem install bundler` (if needed)
+  - Install CocoaPods via Bundler (from `ios/`):
+    - `cd ios && bundle install`
+    - `bundle exec pod install`
+  - Build and run iOS simulator from project root:
+    - npm: `npm run ios`
+    - yarn: `yarn ios`
 
-```sh
-bundle exec pod install
-```
+- **Android setup**
+  - Ensure Android SDK/NDK and an emulator/device are configured (see RN setup guide).
+  - Build and run Android from project root:
+    - npm: `npm run android`
+    - yarn: `yarn android`
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+- **Testing/Linting**
+  - Tests: `npm test` or `yarn test`
+  - Lint: `npm run lint` or `yarn lint`
 
-```sh
-# Using npm
-npm run ios
+## Extending the App
 
-# OR using Yarn
-yarn ios
-```
+- **Persist data**:
+  - Add storage (AsyncStorage/SQLite) or a backend API to replace `src/core/constants.ts`.
+- **Completion metrics**:
+  - Compute completed subtasks vs total; render progress bars/tags.
+- **Bulk actions**:
+  - Clear completed, reorder subtasks, due dates.
+- **Accessibility**:
+  - Add `accessibilityRole`, `accessibilityLabel` for Pressables/checkboxes.
+- **Testing**:
+  - Add unit tests for `formatHeaderDate`, and component tests for `Accordion`/`SubList` interactions.
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Known Trade-offs
+- **Static data**: Ideal for demo; not persisted.
+- **Key uniqueness**: Ensure `subLists` IDs are unique within each list to avoid React key collisions.
+- **Layout gap support**: `gap` relies on RN version/platform support; fall back to margins if needed.
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## Recommended Actions
+- **[persist-data]** Replace `src/core/constants.ts` with a store (e.g., Redux/Zustand) or AsyncStorage.
+- **[accessibility]** Add accessibility props to interactive elements.
+- **[tests]** Add component tests for parent-child checkbox sync and title/text tapping behavior.
 
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+## Status
+- Documentation added reflecting current components, screens, utilities, styles, and design rationale.
