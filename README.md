@@ -117,12 +117,33 @@
   - Absolute-style imports like `core/styles` and `components/Accordion` keep imports clean and refactor-friendly.
 
 ## How to Run
-- Start Metro from project root:
+
+- **Install dependencies (project root)**
+  - npm: `npm install`
+  - yarn: `yarn install`
+
+- **Start Metro (in a separate terminal)**
   - npm: `npm start`
-  - Yarn: `yarn start`
-- Build and run:
-  - Android: `npm run android` or `yarn android`
-  - iOS: `npm run ios` or `yarn ios`
+  - yarn: `yarn start`
+
+- **iOS setup (first run or after native deps change)**
+  - Ensure Ruby Bundler is available: `gem install bundler` (if needed)
+  - Install CocoaPods via Bundler (from `ios/`):
+    - `cd ios && bundle install`
+    - `bundle exec pod install`
+  - Build and run iOS simulator from project root:
+    - npm: `npm run ios`
+    - yarn: `yarn ios`
+
+- **Android setup**
+  - Ensure Android SDK/NDK and an emulator/device are configured (see RN setup guide).
+  - Build and run Android from project root:
+    - npm: `npm run android`
+    - yarn: `yarn android`
+
+- **Testing/Linting**
+  - Tests: `npm test` or `yarn test`
+  - Lint: `npm run lint` or `yarn lint`
 
 ## Extending the App
 
