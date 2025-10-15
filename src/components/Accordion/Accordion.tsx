@@ -1,10 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import {
   View,
   Text,
-  LayoutAnimation,
-  Platform,
-  UIManager,
   TouchableOpacity,
   Pressable,
 } from 'react-native';
@@ -13,24 +10,21 @@ import CheckBox from '@react-native-community/checkbox';
 import { SubList } from '../SubList';
 import { common, palette, spacing } from 'core/styles';
 import styles from './Accordion.styles';
+import useAccordionLogic from './useAccordionLogic';
 
 interface AccordionProps {
   list?: any;
+  initialExpanded?: boolean;
 }
 
-const Accordion: FC<AccordionProps> = ({ list }) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState<boolean>(false);
-  const [expanded, setExpanded] = useState<boolean>(false);
-
-  if (Platform.OS === 'android') {
-    UIManager.setLayoutAnimationEnabledExperimental &&
-      UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-
-  const toggleExpand = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setExpanded(!expanded);
-  };
+const Accordion: FC<AccordionProps> = ({ list, initialExpanded }) => {
+  const {
+    toggleCheckBox,
+    onChangeCheckBox,
+    onPressTitle,
+    expanded,
+    toggleExpand,
+  } = useAccordionLogic(!!initialExpanded);
 
   return (
     <View key={list?.id}>
@@ -41,13 +35,13 @@ const Accordion: FC<AccordionProps> = ({ list }) => {
       >
         <CheckBox
           value={toggleCheckBox}
-          onValueChange={newValue => setToggleCheckBox(newValue)}
+          onValueChange={onChangeCheckBox}
           tintColors={{ true: palette.BLUE }}
         />
 
         <View style={spacing.marginTop4}>
           <View>
-            <Pressable onPress={() => setToggleCheckBox(!toggleCheckBox)}>
+            <Pressable onPress={onPressTitle}>
               <Text style={styles.text18}>{list?.title}</Text>
             </Pressable>
 
