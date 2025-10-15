@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import {
   Text,
   View,
@@ -12,9 +12,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Svg, Path } from 'react-native-svg';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-import { AppStackNavParams } from '../../navigation/AppStackNav';
+import { AppStackNavParams } from 'navigation/AppStackNav';
+import useTaskLogic from './useTaskLogic';
 import { SubList } from 'components/SubList';
-import { palette, spacing, layout } from '../../core/styles';
+import { palette, spacing, layout } from 'core/styles';
 import styles from './Task.styles';
 
 const Task: FC<NativeStackScreenProps<AppStackNavParams, 'Task'>> = ({
@@ -22,10 +23,7 @@ const Task: FC<NativeStackScreenProps<AppStackNavParams, 'Task'>> = ({
   route,
 }) => {
   const task = route.params?.task;
-  const isViewMode = !!task;
-
-  const [title, setTitle] = useState<string>(task?.title || '');
-  const [subLists, _setSubLists] = useState<any[]>(task?.subLists || []);
+  const { isViewMode, title, setTitle, subLists } = useTaskLogic(task);
 
   return (
     <SafeAreaView style={styles.mainContainer}>

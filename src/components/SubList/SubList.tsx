@@ -1,7 +1,8 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC } from 'react';
 import { View, TextInput, Pressable } from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 
+import useSubListLogic from './useSubListLogic';
 import { layout, palette } from 'core/styles';
 import styles from './SubList.styles';
 
@@ -16,28 +17,27 @@ const SubList: FC<SubListProps> = ({
   disabled = true,
   parentChecked,
 }) => {
-  const [toggleCheckBox, setToggleCheckBox] = useState<boolean>(false);
-  const [text, setText] = useState<string>(list?.title || '');
-
-  useEffect(() => {
-    if (typeof parentChecked === 'boolean') {
-      setToggleCheckBox(parentChecked);
-    }
-  }, [parentChecked]);
+  const {
+    toggleCheckBox,
+    onChangeCheckBox,
+    onTogglePress,
+    text,
+    setText,
+  } = useSubListLogic(list, parentChecked);
 
   return (
     <View style={styles.flexedRow}>
       <View style={styles.checkbox}>
         <CheckBox
           value={toggleCheckBox}
-          onValueChange={newValue => setToggleCheckBox(newValue)}
+          onValueChange={onChangeCheckBox}
           tintColors={{ true: palette.BLUE }}
         />
       </View>
 
       <Pressable
         style={!disabled && layout.flex1}
-        onPress={() => setToggleCheckBox(!toggleCheckBox)}
+        onPress={onTogglePress}
         disabled={!disabled}
       >
         <TextInput

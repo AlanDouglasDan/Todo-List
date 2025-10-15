@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { palette, typography } from '../../core/styles';
+import { palette, typography } from 'core/styles';
 
 export default StyleSheet.create({
   flexedRow: {
