@@ -37,6 +37,18 @@ export const lists = [
       { id: 3, title: 'Write down your goals' },
     ],
   },
+  {
+    id: 4,
+    title: 'Stretch everyday for 15 mins',
+    tag: 'Health',
+    tagBackground: palette.LIGHT_PURPLE,
+    tagColor: palette.PURPLE,
+    subLists: [
+      { id: 1, title: 'Stretch your arms' },
+      { id: 2, title: 'Stretch your legs' },
+      { id: 3, title: 'Repeat 15 times' },
+    ],
+  },
 ];
 
 export const TASKS = [
